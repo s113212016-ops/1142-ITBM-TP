@@ -1,0 +1,1079 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ITBM-EMI Term Project Showcase</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --canvas: #F3F0EE;
+      --lifted: #FCFBFA;
+      --white: #FFFFFF;
+      --ink: #141413;
+      --charcoal: #262627;
+      --muted: #696969;
+      --taupe: #D1CDC7;
+      --signal: #CF4500;
+      --arc: #F37338;
+      --link: #3860BE;
+      --red: #EB001B;
+      --yellow: #F79E1B;
+      --line: rgba(20, 20, 19, 0.16);
+      --nav-shadow: rgba(0, 0, 0, 0.04) 0 4px 24px;
+      --soft-shadow: rgba(0, 0, 0, 0.08) 0 24px 48px;
+      --focus: 0 0 0 4px rgba(207, 69, 0, 0.24);
+    }
+
+    [data-theme="dark"] {
+      color-scheme: dark;
+      --canvas: #141413;
+      --lifted: #1F1E1C;
+      --white: #292724;
+      --ink: #F3F0EE;
+      --charcoal: #FCFBFA;
+      --muted: #C8C0BA;
+      --taupe: #4A4642;
+      --signal: #F37338;
+      --arc: #F79E1B;
+      --link: #8AA8FF;
+      --line: rgba(243, 240, 238, 0.18);
+      --nav-shadow: rgba(0, 0, 0, 0.28) 0 8px 28px;
+      --soft-shadow: rgba(0, 0, 0, 0.34) 0 24px 58px;
+      --focus: 0 0 0 4px rgba(247, 158, 27, 0.24);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 12% 12%, color-mix(in srgb, var(--arc) 10%, transparent), transparent 26rem),
+        radial-gradient(circle at 88% 18%, color-mix(in srgb, var(--yellow) 16%, transparent), transparent 24rem),
+        var(--canvas);
+      color: var(--ink);
+      font-family: "Sofia Sans", Inter, Arial, sans-serif;
+      font-size: 16px;
+      font-weight: 450;
+      line-height: 1.4;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .shell {
+      width: min(1180px, calc(100% - 48px));
+      margin: 0 auto;
+    }
+
+    .nav-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      padding: 22px 0 10px;
+      pointer-events: none;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      min-height: 72px;
+      padding: 12px 18px 12px 24px;
+      border: 1px solid rgba(20, 20, 19, 0.06);
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--white) 92%, transparent);
+      box-shadow: var(--nav-shadow);
+      backdrop-filter: blur(18px);
+      pointer-events: auto;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      position: relative;
+      width: 58px;
+      height: 38px;
+      flex: 0 0 auto;
+    }
+
+    .brand-mark::before,
+    .brand-mark::after {
+      position: absolute;
+      top: 2px;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      content: "";
+    }
+
+    .brand-mark::before {
+      left: 4px;
+      background: var(--red);
+    }
+
+    .brand-mark::after {
+      right: 4px;
+      background: color-mix(in srgb, var(--yellow) 88%, transparent);
+      mix-blend-mode: multiply;
+    }
+
+    [data-theme="dark"] .brand-mark::after {
+      mix-blend-mode: normal;
+      opacity: 0.86;
+    }
+
+    .brand-text {
+      min-width: 0;
+    }
+
+    .brand-text small,
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.875rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before,
+    .brand-text small::before {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--arc);
+      content: "";
+    }
+
+    .brand-text strong {
+      display: block;
+      overflow: hidden;
+      max-width: 270px;
+      margin-top: 3px;
+      color: var(--ink);
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .segmented {
+      display: inline-grid;
+      grid-template-columns: repeat(2, minmax(48px, 1fr));
+      gap: 4px;
+      padding: 4px;
+      border: 1.5px solid var(--ink);
+      border-radius: 999px;
+      background: var(--white);
+    }
+
+    .segmented button,
+    .icon-button,
+    .button {
+      min-height: 44px;
+      border: 0;
+      cursor: pointer;
+      transition: transform 160ms ease, background 160ms ease, color 160ms ease, border-color 160ms ease;
+    }
+
+    .segmented button {
+      padding: 0 14px;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--muted);
+      font-size: 0.95rem;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+    }
+
+    .segmented button[aria-pressed="true"] {
+      background: var(--ink);
+      color: var(--canvas);
+    }
+
+    .icon-button {
+      display: inline-grid;
+      width: 48px;
+      height: 48px;
+      place-items: center;
+      border: 1.5px solid var(--ink);
+      border-radius: 50%;
+      background: var(--white);
+      color: var(--ink);
+      font-size: 1.05rem;
+    }
+
+    .icon-button:hover,
+    .segmented button:hover,
+    .button:hover {
+      transform: translateY(-1px);
+    }
+
+    button:focus-visible,
+    a:focus-visible {
+      outline: none;
+      box-shadow: var(--focus);
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-width: 150px;
+      padding: 6px 24px;
+      border: 1.5px solid var(--ink);
+      border-radius: 20px;
+      background: var(--ink);
+      color: var(--canvas);
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      text-align: center;
+    }
+
+    .button.secondary {
+      background: var(--white);
+      color: var(--ink);
+    }
+
+    .button.disabled {
+      pointer-events: none;
+      border-color: var(--taupe);
+      background: transparent;
+      color: var(--muted);
+    }
+
+    .hero {
+      position: relative;
+      padding: clamp(48px, 8vw, 96px) 0 52px;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      position: absolute;
+      left: max(24px, calc((100vw - 1180px) / 2));
+      top: 38px;
+      z-index: -1;
+      color: color-mix(in srgb, var(--taupe) 42%, transparent);
+      content: "Showcase";
+      font-size: clamp(4.8rem, 14vw, 11rem);
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      line-height: 0.9;
+      opacity: 0.42;
+      white-space: nowrap;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(320px, 1.1fr);
+      gap: clamp(36px, 7vw, 88px);
+      align-items: center;
+    }
+
+    h1,
+    h2,
+    h3 {
+      color: var(--ink);
+      font-weight: 500;
+      letter-spacing: -0.02em;
+    }
+
+    h1 {
+      max-width: 760px;
+      margin: 18px 0 22px;
+      font-size: clamp(2.65rem, 7vw, 4rem);
+      line-height: 1;
+    }
+
+    .hero-copy {
+      max-width: 650px;
+      margin: 0;
+      color: var(--charcoal);
+      font-size: clamp(1rem, 2vw, 1.12rem);
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
+
+    .hero-stage {
+      position: relative;
+      min-height: 500px;
+    }
+
+    .orbit {
+      position: absolute;
+      inset: 6% -6% auto auto;
+      width: 112%;
+      height: 76%;
+      pointer-events: none;
+    }
+
+    .orbit path {
+      fill: none;
+      stroke: var(--arc);
+      stroke-linecap: round;
+      stroke-width: 1.4;
+      opacity: 0.86;
+    }
+
+    .hero-circle {
+      position: absolute;
+      display: grid;
+      width: clamp(210px, 27vw, 320px);
+      aspect-ratio: 1;
+      place-items: center;
+      border-radius: 50%;
+      background:
+        linear-gradient(135deg, color-mix(in srgb, var(--red) 82%, var(--white)), color-mix(in srgb, var(--yellow) 86%, var(--white)));
+      box-shadow: var(--soft-shadow);
+    }
+
+    .hero-circle.large {
+      right: 10%;
+      top: 14%;
+    }
+
+    .hero-circle.small {
+      left: 2%;
+      bottom: 5%;
+      width: clamp(170px, 21vw, 240px);
+      background:
+        linear-gradient(145deg, color-mix(in srgb, var(--link) 70%, var(--white)), color-mix(in srgb, var(--arc) 76%, var(--white)));
+    }
+
+    .circle-inner {
+      display: grid;
+      width: 74%;
+      aspect-ratio: 1;
+      place-items: center;
+      border-radius: 50%;
+      background: color-mix(in srgb, var(--canvas) 92%, transparent);
+      color: var(--ink);
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      text-align: center;
+    }
+
+    .satellite {
+      position: absolute;
+      right: 4%;
+      bottom: 10%;
+      display: grid;
+      width: 58px;
+      height: 58px;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--white);
+      color: var(--ink);
+      font-size: 1.35rem;
+      box-shadow: var(--nav-shadow);
+    }
+
+    .section {
+      padding: clamp(48px, 7vw, 96px) 0;
+    }
+
+    .voice-panel,
+    .review-band {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 24px;
+      align-items: center;
+      padding: clamp(24px, 4vw, 40px);
+      border: 1px solid var(--line);
+      border-radius: 40px;
+      background: var(--lifted);
+      box-shadow: var(--soft-shadow);
+    }
+
+    .voice-panel h2,
+    .review-band h2 {
+      margin: 0 0 10px;
+      font-size: clamp(1.55rem, 3vw, 2.25rem);
+      line-height: 1.12;
+    }
+
+    .voice-panel p,
+    .review-band p,
+    .section-heading p,
+    .project-card p {
+      color: var(--muted);
+    }
+
+    .voice-panel p,
+    .review-band p {
+      max-width: 700px;
+      margin: 0;
+    }
+
+    .voice-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .voice-status {
+      min-height: 22px;
+      margin-top: 12px;
+      color: var(--signal);
+      font-weight: 700;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 28px;
+      margin-bottom: clamp(28px, 4vw, 48px);
+    }
+
+    .section-heading h2 {
+      margin: 14px 0 0;
+      font-size: clamp(2rem, 5vw, 3.35rem);
+      line-height: 1;
+    }
+
+    .section-heading p {
+      max-width: 580px;
+      margin: 12px 0 0;
+    }
+
+    .projects-wrap {
+      position: relative;
+    }
+
+    .projects-wrap::before {
+      position: absolute;
+      left: 4%;
+      top: 16%;
+      z-index: -1;
+      width: 92%;
+      height: 42%;
+      border-top: 1.5px solid var(--arc);
+      border-radius: 50%;
+      content: "";
+      opacity: 0.55;
+      transform: rotate(-3deg);
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: clamp(28px, 4vw, 44px);
+      align-items: start;
+    }
+
+    .project-card {
+      min-width: 0;
+    }
+
+    .project-card:nth-child(2) {
+      margin-top: 76px;
+    }
+
+    .project-card:nth-child(3) {
+      margin-top: 24px;
+    }
+
+    .portrait {
+      position: relative;
+      width: min(100%, 320px);
+      aspect-ratio: 1;
+      margin: 0 auto 28px;
+      border-radius: 50%;
+      background: var(--lifted);
+      box-shadow: var(--soft-shadow);
+    }
+
+    .portrait img,
+    .portrait-fallback {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+    }
+
+    .portrait img {
+      display: block;
+      object-fit: cover;
+    }
+
+    .portrait-fallback {
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 34% 32%, color-mix(in srgb, var(--yellow) 64%, transparent), transparent 0 24%, transparent 25%),
+        radial-gradient(circle at 64% 60%, color-mix(in srgb, var(--red) 55%, transparent), transparent 0 26%, transparent 27%),
+        linear-gradient(135deg, color-mix(in srgb, var(--canvas) 70%, var(--white)), color-mix(in srgb, var(--arc) 20%, var(--lifted)));
+      color: var(--ink);
+      font-size: clamp(2.6rem, 6vw, 4.6rem);
+      font-weight: 500;
+      letter-spacing: -0.02em;
+    }
+
+    .portrait .satellite {
+      right: -8px;
+      bottom: 24px;
+      border: 1px solid rgba(20, 20, 19, 0.06);
+    }
+
+    .project-card .eyebrow {
+      margin-bottom: 12px;
+    }
+
+    .project-card h3 {
+      margin: 0;
+      font-size: clamp(1.35rem, 3vw, 1.7rem);
+      line-height: 1.2;
+    }
+
+    .project-card p {
+      min-height: 88px;
+      margin: 12px 0 20px;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .review-band {
+      background:
+        radial-gradient(circle at 82% 10%, color-mix(in srgb, var(--yellow) 22%, transparent), transparent 18rem),
+        var(--lifted);
+    }
+
+    .footer {
+      margin-top: 48px;
+      padding: clamp(48px, 7vw, 80px) 0 64px;
+      border-radius: 40px 40px 0 0;
+      background: #141413;
+      color: #FFFFFF;
+    }
+
+    .footer h2 {
+      max-width: 760px;
+      margin: 0 0 34px;
+      color: #FFFFFF;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      line-height: 1.05;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 24px;
+      padding-top: 28px;
+      border-top: 1px solid rgba(255, 255, 255, 0.24);
+    }
+
+    .footer-grid h3 {
+      margin: 0 0 12px;
+      color: rgba(255, 255, 255, 0.64);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .footer-grid p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 920px) {
+      .hero-grid,
+      .voice-panel,
+      .review-band {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-stage {
+        min-height: 420px;
+      }
+
+      .projects-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .project-card:nth-child(2),
+      .project-card:nth-child(3) {
+        margin-top: 0;
+      }
+
+      .voice-actions {
+        justify-content: flex-start;
+      }
+
+      .footer-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 680px) {
+      .shell {
+        width: min(100% - 28px, 1180px);
+      }
+
+      .nav-wrap {
+        padding-top: 12px;
+      }
+
+      .nav {
+        align-items: stretch;
+        flex-direction: column;
+        border-radius: 32px;
+      }
+
+      .brand-text strong {
+        max-width: 210px;
+      }
+
+      .controls,
+      .section-heading {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .segmented {
+        width: 100%;
+      }
+
+      .hero {
+        padding-top: 38px;
+      }
+
+      .hero-stage {
+        min-height: 360px;
+      }
+
+      .hero-circle.large {
+        right: 0;
+      }
+
+      .hero-circle.small {
+        left: 0;
+        bottom: 0;
+      }
+
+      .hero-actions,
+      .card-actions {
+        flex-direction: column;
+      }
+
+      .button {
+        width: 100%;
+      }
+
+      .projects-wrap::before {
+        display: none;
+      }
+
+      .projects-grid,
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .project-card p {
+        min-height: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="nav-wrap">
+    <nav class="shell nav" aria-label="Showcase controls">
+      <a class="brand" href="#top" aria-label="ITBM-EMI showcase home">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-text">
+          <small>ITBM-EMI</small>
+          <strong data-i18n="navTitle">Term Project Showcase</strong>
+        </span>
+      </a>
+      <div class="controls">
+        <div class="segmented" aria-label="Language switcher">
+          <button type="button" data-lang="en" aria-pressed="true">EN</button>
+          <button type="button" data-lang="zh" aria-pressed="false">中</button>
+        </div>
+        <button class="icon-button" type="button" id="themeToggle" title="Toggle light or dark mode" aria-label="Toggle light or dark mode">☾</button>
+      </div>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="shell hero-grid">
+        <div>
+          <span class="eyebrow" data-i18n="eyebrow">Industry Trends and Business Models</span>
+          <h1 data-i18n="heroTitle">Three teams. Three companies. One showcase.</h1>
+          <p class="hero-copy" data-i18n="heroSubtitle">Explore the final Term Project SPA websites created by ITBM-EMI student teams, preview their focus companies, and complete the peer review in one place.</p>
+          <div class="hero-actions">
+            <a class="button" href="#projects" data-i18n="viewProjects">View Projects</a>
+            <a class="button secondary" id="reviewLinkHero" href="#" target="_blank" rel="noopener noreferrer" data-i18n="peerReview">Peer Review Form</a>
+          </div>
+        </div>
+
+        <div class="hero-stage" aria-hidden="true">
+          <svg class="orbit" viewBox="0 0 620 420" preserveAspectRatio="none">
+            <path d="M20 305 C135 90 342 64 590 142"></path>
+            <path d="M86 358 C220 245 375 224 560 300"></path>
+          </svg>
+          <div class="hero-circle large">
+            <span class="circle-inner">ITBM<br>TP</span>
+            <span class="satellite">↗</span>
+          </div>
+          <div class="hero-circle small">
+            <span class="circle-inner">SPA</span>
+            <span class="satellite">↘</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="shell voice-panel">
+        <div>
+          <span class="eyebrow" data-i18n="voiceEyebrow">Audio tour</span>
+          <h2 data-i18n="voiceTitle">Voice Guide</h2>
+          <p data-i18n="voiceDescription">Listen to a short guided introduction for the showcase in the selected language.</p>
+          <div class="voice-status" id="voiceStatus" role="status" aria-live="polite"></div>
+        </div>
+        <div class="voice-actions" aria-label="Voice guide controls">
+          <button class="icon-button" type="button" id="speakButton" title="Play voice guide" aria-label="Play voice guide">▶</button>
+          <button class="icon-button" type="button" id="pauseButton" title="Pause voice guide" aria-label="Pause voice guide">Ⅱ</button>
+          <button class="icon-button" type="button" id="stopButton" title="Stop voice guide" aria-label="Stop voice guide">■</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="projects">
+      <div class="shell projects-wrap">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow" data-i18n="galleryEyebrow">Final SPA Gallery</span>
+            <h2 data-i18n="galleryTitle">Project previews</h2>
+            <p data-i18n="gallerySubtitle">Each circular preview links to a student team SPA and gives the class a quick sense of the company focus.</p>
+          </div>
+          <a class="button secondary" id="reviewLinkGallery" href="#" target="_blank" rel="noopener noreferrer" data-i18n="peerReviewShort">Review Form</a>
+        </div>
+        <div class="projects-grid" id="projectsGrid"></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="shell review-band">
+        <div>
+          <span class="eyebrow" data-i18n="reviewEyebrow">Peer review</span>
+          <h2 data-i18n="reviewTitle">Ready to evaluate the group websites?</h2>
+          <p data-i18n="reviewDescription">Use the shared Google peer-review form after browsing the three project SPAs.</p>
+        </div>
+        <a class="button" id="reviewLinkBottom" href="#" target="_blank" rel="noopener noreferrer" data-i18n="peerReview">Peer Review Form</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="shell">
+      <h2 data-i18n="footerTitle">A single place to browse, listen, and review.</h2>
+      <div class="footer-grid">
+        <div>
+          <h3 data-i18n="footerCourseHead">Course</h3>
+          <p>Industry Trends and Business Models (ITBM-EMI)</p>
+        </div>
+        <div>
+          <h3 data-i18n="footerWorkHead">Work</h3>
+          <p data-i18n="footerWork">Three student SPA term projects</p>
+        </div>
+        <div>
+          <h3 data-i18n="footerRoleHead">Role</h3>
+          <p data-i18n="footerRole">Teaching assistant showcase hub</p>
+        </div>
+        <div>
+          <h3 data-i18n="footerAccessHead">Access</h3>
+          <p data-i18n="footerAccess">Bilingual, responsive, and voice-guided</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const peerReviewUrl = "https://forms.gle/replace-with-your-google-form";
+
+    const projects = [
+      {
+        groupId: "Group 1",
+        groupName: "Team One",
+        companyName: "Company Name TBD",
+        spaUrl: "",
+        screenshot: "",
+        description: {
+          en: "Add the team's company analysis, industry trend focus, and business model insight here.",
+          zh: "在這裡加入此組的公司分析、產業趨勢重點與商業模式洞察。"
+        }
+      },
+      {
+        groupId: "Group 2",
+        groupName: "Team Two",
+        companyName: "Company Name TBD",
+        spaUrl: "",
+        screenshot: "",
+        description: {
+          en: "Add the team's company analysis, industry trend focus, and business model insight here.",
+          zh: "在這裡加入此組的公司分析、產業趨勢重點與商業模式洞察。"
+        }
+      },
+      {
+        groupId: "Group 3",
+        groupName: "Team Three",
+        companyName: "Company Name TBD",
+        spaUrl: "",
+        screenshot: "",
+        description: {
+          en: "Add the team's company analysis, industry trend focus, and business model insight here.",
+          zh: "在這裡加入此組的公司分析、產業趨勢重點與商業模式洞察。"
+        }
+      }
+    ];
+
+    const copy = {
+      en: {
+        documentTitle: "ITBM-EMI Term Project Showcase",
+        navTitle: "Term Project Showcase",
+        eyebrow: "Industry Trends and Business Models",
+        heroTitle: "Three teams. Three companies. One showcase.",
+        heroSubtitle: "Explore the final Term Project SPA websites created by ITBM-EMI student teams, preview their focus companies, and complete the peer review in one place.",
+        viewProjects: "View Projects",
+        peerReview: "Peer Review Form",
+        peerReviewShort: "Review Form",
+        voiceEyebrow: "Audio tour",
+        voiceTitle: "Voice Guide",
+        voiceDescription: "Listen to a short guided introduction for the showcase in the selected language.",
+        galleryEyebrow: "Final SPA Gallery",
+        galleryTitle: "Project previews",
+        gallerySubtitle: "Each circular preview links to a student team SPA and gives the class a quick sense of the company focus.",
+        openProject: "Open SPA",
+        linkPending: "Link Pending",
+        reviewEyebrow: "Peer review",
+        reviewTitle: "Ready to evaluate the group websites?",
+        reviewDescription: "Use the shared Google peer-review form after browsing the three project SPAs.",
+        footerTitle: "A single place to browse, listen, and review.",
+        footerCourseHead: "Course",
+        footerWorkHead: "Work",
+        footerWork: "Three student SPA term projects",
+        footerRoleHead: "Role",
+        footerRole: "Teaching assistant showcase hub",
+        footerAccessHead: "Access",
+        footerAccess: "Bilingual, responsive, and voice-guided",
+        speaking: "Playing the voice guide.",
+        paused: "Voice guide paused.",
+        stopped: "Voice guide stopped.",
+        unsupported: "Voice guidance is not available in this browser.",
+        voiceText: "Welcome to the ITBM-EMI Term Project Showcase. This page brings together three student SPA websites from the Industry Trends and Business Models course. Browse each project preview, open the team websites, and use the peer review form after exploring the work."
+      },
+      zh: {
+        documentTitle: "ITBM-EMI 期末專題展示",
+        navTitle: "期末專題展示",
+        eyebrow: "Industry Trends and Business Models",
+        heroTitle: "三組團隊，三間公司，一個展示頁。",
+        heroSubtitle: "在這裡瀏覽 ITBM-EMI 學生團隊製作的期末專題 SPA，快速預覽各組公司主題，並完成小組網頁互評。",
+        viewProjects: "查看專題",
+        peerReview: "前往互評表單",
+        peerReviewShort: "互評表單",
+        voiceEyebrow: "語音導覽",
+        voiceTitle: "語音導覽",
+        voiceDescription: "使用目前選擇的語言，播放一段簡短的展示頁導覽。",
+        galleryEyebrow: "期末 SPA 展示",
+        galleryTitle: "專題預覽",
+        gallerySubtitle: "每個圓形預覽都連到學生團隊的 SPA，協助課堂快速掌握各組公司主題。",
+        openProject: "開啟 SPA",
+        linkPending: "連結待補",
+        reviewEyebrow: "小組互評",
+        reviewTitle: "準備好評估各組網站了嗎？",
+        reviewDescription: "瀏覽三組專題 SPA 後，請使用共用的 Google 小組網頁互評表單。",
+        footerTitle: "集中瀏覽、聆聽導覽，並完成互評。",
+        footerCourseHead: "課程",
+        footerWorkHead: "作品",
+        footerWork: "三組學生 SPA 期末專題",
+        footerRoleHead: "角色",
+        footerRole: "助教製作的展示整合頁",
+        footerAccessHead: "使用",
+        footerAccess: "中英雙語、響應式、支援語音導覽",
+        speaking: "正在播放語音導覽。",
+        paused: "語音導覽已暫停。",
+        stopped: "語音導覽已停止。",
+        unsupported: "此瀏覽器不支援語音導覽。",
+        voiceText: "歡迎來到 ITBM-EMI 期末專題展示頁。這個頁面整合 Industry Trends and Business Models 課程中三組學生製作的 SPA 網站。你可以瀏覽每組預覽，開啟團隊網站，並在看完後使用互評表單完成評分。"
+      }
+    };
+
+    let currentLanguage = "en";
+    let currentUtterance = null;
+
+    const root = document.documentElement;
+    const projectsGrid = document.getElementById("projectsGrid");
+    const voiceStatus = document.getElementById("voiceStatus");
+    const reviewLinks = [
+      document.getElementById("reviewLinkHero"),
+      document.getElementById("reviewLinkGallery"),
+      document.getElementById("reviewLinkBottom")
+    ];
+
+    function hasValue(value) {
+      return typeof value === "string" && value.trim().length > 0;
+    }
+
+    function updateReviewLinks() {
+      reviewLinks.forEach((link) => {
+        link.href = peerReviewUrl;
+      });
+    }
+
+    function renderProjects() {
+      projectsGrid.innerHTML = projects.map((project, index) => {
+        const description = project.description[currentLanguage] || project.description.en;
+        const hasLink = hasValue(project.spaUrl);
+        const hasImage = hasValue(project.screenshot);
+        const safeGroup = project.groupId || `Group ${index + 1}`;
+        const safeTeam = project.groupName || "Team";
+        const safeCompany = project.companyName || "Company Name TBD";
+        const preview = hasImage
+          ? `<img src="${project.screenshot}" alt="${safeCompany} website preview" loading="lazy">`
+          : `<div class="portrait-fallback">${index + 1}</div>`;
+        const satellite = hasLink
+          ? `<a class="satellite" href="${project.spaUrl}" target="_blank" rel="noopener noreferrer" aria-label="${copy[currentLanguage].openProject}: ${safeCompany}">↗</a>`
+          : `<span class="satellite" aria-hidden="true">↗</span>`;
+        const link = hasLink
+          ? `<a class="button" href="${project.spaUrl}" target="_blank" rel="noopener noreferrer">${copy[currentLanguage].openProject}</a>`
+          : `<span class="button disabled" aria-disabled="true">${copy[currentLanguage].linkPending}</span>`;
+
+        return `
+          <article class="project-card">
+            <div class="portrait">${preview}${satellite}</div>
+            <span class="eyebrow">${safeGroup} · ${safeTeam}</span>
+            <h3>${safeCompany}</h3>
+            <p>${description}</p>
+            <div class="card-actions">${link}</div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function setLanguage(language) {
+      currentLanguage = language;
+      root.lang = language === "zh" ? "zh-Hant" : "en";
+      document.title = copy[language].documentTitle;
+      document.querySelectorAll("[data-i18n]").forEach((node) => {
+        const key = node.dataset.i18n;
+        node.textContent = copy[language][key] || node.textContent;
+      });
+      document.querySelectorAll("[data-lang]").forEach((button) => {
+        button.setAttribute("aria-pressed", String(button.dataset.lang === language));
+      });
+      renderProjects();
+      stopSpeaking(false);
+      voiceStatus.textContent = "";
+    }
+
+    function setTheme(theme) {
+      root.dataset.theme = theme;
+      localStorage.setItem("itbmTheme", theme);
+      const toggle = document.getElementById("themeToggle");
+      const isDark = theme === "dark";
+      toggle.textContent = isDark ? "☀" : "☾";
+      toggle.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
+      toggle.setAttribute("title", isDark ? "Switch to light mode" : "Switch to dark mode");
+    }
+
+    function speakGuide() {
+      if (!("speechSynthesis" in window) || !("SpeechSynthesisUtterance" in window)) {
+        voiceStatus.textContent = copy[currentLanguage].unsupported;
+        return;
+      }
+
+      window.speechSynthesis.cancel();
+      currentUtterance = new SpeechSynthesisUtterance(copy[currentLanguage].voiceText);
+      currentUtterance.lang = currentLanguage === "zh" ? "zh-TW" : "en-US";
+      currentUtterance.rate = currentLanguage === "zh" ? 0.95 : 1;
+      currentUtterance.onend = () => {
+        voiceStatus.textContent = copy[currentLanguage].stopped;
+      };
+      window.speechSynthesis.speak(currentUtterance);
+      voiceStatus.textContent = copy[currentLanguage].speaking;
+    }
+
+    function pauseSpeaking() {
+      if ("speechSynthesis" in window && window.speechSynthesis.speaking) {
+        window.speechSynthesis.pause();
+        voiceStatus.textContent = copy[currentLanguage].paused;
+      }
+    }
+
+    function stopSpeaking(showStatus = true) {
+      if ("speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+      }
+      if (showStatus) {
+        voiceStatus.textContent = copy[currentLanguage].stopped;
+      }
+    }
+
+    document.querySelectorAll("[data-lang]").forEach((button) => {
+      button.addEventListener("click", () => setLanguage(button.dataset.lang));
+    });
+
+    document.getElementById("themeToggle").addEventListener("click", () => {
+      setTheme(root.dataset.theme === "dark" ? "light" : "dark");
+    });
+
+    document.getElementById("speakButton").addEventListener("click", speakGuide);
+    document.getElementById("pauseButton").addEventListener("click", pauseSpeaking);
+    document.getElementById("stopButton").addEventListener("click", () => stopSpeaking(true));
+
+    updateReviewLinks();
+    setTheme(localStorage.getItem("itbmTheme") || "light");
+    setLanguage("en");
+  </script>
+</body>
+</html>
